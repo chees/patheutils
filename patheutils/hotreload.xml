@@ -1,0 +1,8 @@
+<!DOCTYPE project>
+<project name="patheutils" default="hotreloadjsps" basedir=".">
+	<target name="hotreloadjsps">
+		<copy todir="target/patheutils-1.0-SNAPSHOT">
+			<fileset dir="src/main/webapp" includes="*.jsp" />
+		</copy>
+	</target>
+</project>
