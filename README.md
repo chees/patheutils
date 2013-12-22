@@ -1,5 +1,6 @@
 Run locally:
 
+	cd patheutils
     mvn appengine:devserver
 
 
@@ -12,4 +13,6 @@ Setup Google Cloud Storage bucket:
 
 Deploy:
 
+	cd patheutils
     mvn appengine:update
+    open http://patheutils.appspot.com
