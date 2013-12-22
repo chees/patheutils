@@ -34,15 +34,12 @@ public class ImdbParser {
 			ImdbFindResult res = mapper.readValue(connection.getInputStream(), ImdbFindResult.class);
 			if (res.titlePopular != null && res.titlePopular.size() > 0) {
 				movie.imdbId = res.titlePopular.get(0).id;
-				return;
 			} else if (res.titleExact != null && res.titleExact.size() > 0) {
 				log.warning("titlePopular not found for movie: " + title);
 				movie.imdbId = res.titleExact.get(0).id;
-				return;
 			} else if (res.titleApprox != null && res.titleApprox.size() > 0) {
 				log.warning("titleApprox not found for movie: " + title);
 				movie.imdbId = res.titleApprox.get(0).id;
-				return;
 			} else {
 				log.warning(mapper.writeValueAsString(res));
 			}
