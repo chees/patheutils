@@ -21,10 +21,13 @@ public class PatheParser {
 		Connection connection = Jsoup.connect("http://www.pathe.nl/bioscoopagenda/denhaag/" + date);
 		connection.timeout(30000);
 		Document doc = connection.get();
-		Elements movies = doc.select("div.heading h3 a");
+		Elements elems = doc.select(".movie-highlight.bioscoopagenda");
 		List<Movie> result = new ArrayList<Movie>();
-		for (Element m : movies) {
-			result.add(new Movie(m.text()));
+		for (Element e : elems) {
+			String title = e.select("div.heading h3 a").get(0).text();
+			String thumbnail = e.select("a img").get(0).attr("abs:src");
+			
+			result.add(new Movie(title, thumbnail));
 		}
 		return result;
 	}

@@ -2,12 +2,14 @@ package info.chees.patheutils.models;
 
 public class Movie implements Comparable<Movie> {
 	public String title;
+	public String thumbnail;
 	public String imdbId;
 	public String imdbTitle;
 	public float rating;
 	
-	public Movie(String title) {
+	public Movie(String title, String thumbnail) {
 		this.title = title;
+		this.thumbnail = thumbnail;
 	}
 	
 	@Override
