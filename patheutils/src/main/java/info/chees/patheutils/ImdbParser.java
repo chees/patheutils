@@ -32,6 +32,7 @@ public class ImdbParser {
 
 		if (connection.getResponseCode() == 200) {
 			ImdbFindResult res = mapper.readValue(connection.getInputStream(), ImdbFindResult.class);
+			// TODO take the year into account
 			if (res.titlePopular != null && res.titlePopular.size() > 0) {
 				movie.imdbId = res.titlePopular.get(0).id;
 			} else if (res.titleExact != null && res.titleExact.size() > 0) {

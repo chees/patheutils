@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Beste films van Den Haag</title>
+  <meta name="viewport" content="width=device-width">
+  <style>
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+.container div {
+  margin-bottom: 10px;
+}
+.container div a {
+  display: block;
+}
+  </style>
+</head>
+<body>
+<h1>Beste films van Den Haag</h1>
+<div class="container" data-role="container">
+</div>
+<script>
+var container = document.querySelector('[data-role="container"]');
+
+function addMovie(m) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(m.rating + ' ' + m.title + ' '));
+
+  var a = document.createElement('a');
+  a.href = 'http://www.imdb.com/title/' + m.imdbId + '/';
+  a.appendChild(document.createTextNode(m.imdbTitle));
+  div.appendChild(a);
+
+  container.appendChild(div);
+}
+
+function init() {
+  var req = new XMLHttpRequest();
+  req.onload = function() {
+    var movies = JSON.parse(this.responseText);
+    for (var i = 0; i < movies.length; i++) {
+      addMovie(movies[i]);
+    }
+  };
+  req.open('get', 'http://patheutils.chees.info/data/movies2013-12-22.json');
+  req.send();
+}
+
+init();
+</script>
+</body>
+</html>

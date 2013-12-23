@@ -65,7 +65,7 @@ public class PatheServlet extends HttpServlet {
 	
 	private void writeToGCS(String json) throws IOException {
 		String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-		GcsFilename filename = new GcsFilename("patheutils.chees.info", "movies" + date + ".json");
+		GcsFilename filename = new GcsFilename("patheutils.chees.info", "data/movies" + date + ".json");
 		GcsFileOptions options = new GcsFileOptions.Builder()
 				.mimeType("application/json")
 				.cacheControl("Cache-Control: public, max-age=1") // TODO set higher cache

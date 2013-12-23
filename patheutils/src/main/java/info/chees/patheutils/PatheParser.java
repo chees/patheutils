@@ -16,7 +16,8 @@ import org.jsoup.select.Elements;
 
 public class PatheParser {
 	public static List<Movie> getMovies() throws IOException {
-		String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+		//String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+		String date = "24-12-2013";
 		Connection connection = Jsoup.connect("http://www.pathe.nl/bioscoopagenda/denhaag/" + date);
 		connection.timeout(30000);
 		Document doc = connection.get();

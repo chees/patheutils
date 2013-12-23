@@ -6,7 +6,7 @@
 	<link type="text/css" rel="stylesheet" href="/stylesheets/main.css"/>
 </head>
 <body>
-hi bye yoblaatyodoh
+
 
 <script>
 var oReq = new XMLHttpRequest();
@@ -17,7 +17,7 @@ oReq.onload = function() {
 		document.write('<div>' + m.title + ' ' + m.rating + '</div>');
 	}
 };
-oReq.open("get", "http://patheutils.chees.info/movies2013-12-22.json");
+oReq.open("get", "http://patheutils.chees.info/data/movies2013-12-22.json");
 oReq.send();
 </script>
 </body>
