@@ -1,7 +1,12 @@
-Run locally:
+Run scraper locally:
 
 	cd patheutils
     mvn appengine:devserver
+
+Run site locally:
+
+    cd static
+    python -m SimpleHTTPServer
 
 
 Setup Google Cloud Storage bucket:
@@ -11,8 +16,13 @@ Setup Google Cloud Storage bucket:
     gsutil cors set gcscors.xml gs://patheutils.chees.info
 
 
-Deploy:
+Deploy scraper:
 
 	cd patheutils
     mvn appengine:update
     open http://patheutils.appspot.com
+
+Deploy site:
+
+    ./deploystatic.sh
+    open http://patheutils.chees.info
