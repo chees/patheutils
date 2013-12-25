@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+	<cron>
+		<url>/cron</url>
+		<schedule>every day 03:00</schedule>
+		<timezone>Europe/Amsterdam</timezone>
+	</cron>
+</cronentries>
