@@ -7,41 +7,82 @@
   <style>
 body {
   font-family: 'Open Sans', sans-serif;
+  padding: 0 10px;
 }
-.container div {
-
+a {
+  color: #321;
+}
+a:hover {
+  color: #00f;
+}
+.container {
+  padding-left: 0;
+}
+.container li {
   clear: both;
+  position: relative;
+  min-height: 100px;
 }
-.container div img {
+.container img {
   float: left;
+  width: 75px;
+  height: 100px;
   margin: 0 10px 10px 0;
 }
-.container div a {
-  display: block;
+.container h2 {
+  background-color: #ffc426;
+  padding: 2px;
+  box-shadow: 5px 5px 10px #ccc;
+}
+.container .imdbRating {
+  font-weight: bold;
+}
+.container a {
+  position: absolute;
+  bottom: 0;
+  font-size: 80%;
 }
   </style>
 </head>
 <body>
 <h1>Beste films van Den Haag</h1>
-<div class="container" data-role="container">
-</div>
+<ul class="container" data-role="container">
+  <!--
+  <li>
+    <img src="thumbnail.jpg">
+    <h2>Bla</h2>
+    <div class="imdbRating">1.2</div>
+    <a href="#TODO">Bla</a>
+  </li>
+-->
+</ul>
 <script>
 var container = document.querySelector('[data-role="container"]');
 
 function addMovie(m) {
-  var div = document.createElement('div');
-  div.appendChild(document.createTextNode(m.rating + ' ' + m.title + ' '));
+  var li = document.createElement('li');
 
   var img = new Image();
   img.src = m.thumbnail;
-  div.appendChild(img);
+  //img.src = "thumbnail.jpg";
+  li.appendChild(img);
+
+  var h2 = document.createElement('h2');
+  h2.appendChild(document.createTextNode(m.title));
+  li.appendChild(h2);
+
+  var imdbRating = document.createElement('div');
+  imdbRating.className = 'imdbRating';
+  imdbRating.appendChild(document.createTextNode(m.rating));
+  li.appendChild(imdbRating);
 
   var a = document.createElement('a');
   a.href = 'http://www.imdb.com/title/' + m.imdbId + '/';
-  a.appendChild(document.createTextNode(m.imdbTitle));
-  div.appendChild(a);
+  var imdbTitle = m.imdbTitle.substring(0, m.imdbTitle.length - 7);
+  a.appendChild(document.createTextNode(imdbTitle));
+  li.appendChild(a);
 
-  container.appendChild(div);
+  container.appendChild(li);
 }
 
 function init() {
@@ -53,6 +94,7 @@ function init() {
     }
   };
   req.open('get', 'http://patheutils.chees.info/data/movies2013-12-23.json');
+  //req.open('get', '/data/mock.json');
   req.send();
 }
 
