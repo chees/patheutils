@@ -2,6 +2,7 @@
 <queue-entries>
 	<queue>
 		<name>movies</name>
+		<rate>1/s</rate>
 		<max-concurrent-requests>1</max-concurrent-requests>
 	</queue>
 </queue-entries>
