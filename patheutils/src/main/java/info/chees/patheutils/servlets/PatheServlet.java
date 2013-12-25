@@ -68,7 +68,7 @@ public class PatheServlet extends HttpServlet {
 		
 		String json = mapper.writeValueAsString(movies);
 		
-		writeToGCS(json);
+		writeToGCS(json, date);
 		
 		resp.setContentType("text/plain");
 		resp.getWriter().println("Done.");
@@ -77,9 +77,9 @@ public class PatheServlet extends HttpServlet {
 		//req.getRequestDispatcher("/index.jsp").forward(req, resp);
 	}
 	
-	private void writeToGCS(String json) throws IOException {
-		String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-		GcsFilename filename = new GcsFilename("patheutils.chees.info", "data/movies" + date + ".json");
+	private void writeToGCS(String json, Date date) throws IOException {
+		String d = new SimpleDateFormat("yyyy-MM-dd").format(date);
+		GcsFilename filename = new GcsFilename("patheutils.chees.info", "data/movies" + d + ".json");
 		GcsFileOptions options = new GcsFileOptions.Builder()
 				.mimeType("application/json")
 				.cacheControl("Cache-Control: public, max-age=1") // TODO set higher cache
