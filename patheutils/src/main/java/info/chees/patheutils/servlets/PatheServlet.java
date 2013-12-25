@@ -6,6 +6,7 @@ import info.chees.patheutils.models.Movie;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -35,11 +36,24 @@ public class PatheServlet extends HttpServlet {
 	private final GcsService gcsService =
 		      GcsServiceFactory.createGcsService(RetryParams.getDefaultInstance());
 	
+	private static Date getDate(HttpServletRequest req) {
+		String date = req.getParameter("date");
+		if (date == null)
+			return new Date();
+		try {
+			return new SimpleDateFormat("yyyy-MM-dd").parse(date);
+		} catch (ParseException e) {
+			return new Date();
+		}
+	}
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		List<Movie> movies = PatheParser.getMovies();
+		Date date = getDate(req);
+		
+		List<Movie> movies = PatheParser.getMovies(date);
 		for (Movie m : movies) {
 			//if (Math.random() < 0.5) break;
 			ImdbParser.fillImdbId(m);

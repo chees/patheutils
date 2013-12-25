@@ -6,10 +6,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class ImdbFindResultTitle {
 	public String id;
 	public String title;
+	public String description;
 	/*
 	String name;
 	String titleDescription;
 	String episodeTitle;
-	String description;
 	*/
+	
+	public int getYear() {
+		return Integer.parseInt(description.substring(0, 4));
+	}
 }

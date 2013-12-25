@@ -1,6 +1,7 @@
 package info.chees.patheutils;
 
 import info.chees.patheutils.models.ImdbFindResult;
+import info.chees.patheutils.models.ImdbFindResultTitle;
 import info.chees.patheutils.models.Movie;
 
 import java.io.IOException;
@@ -26,23 +27,30 @@ public class ImdbParser {
 		String q = URLEncoder.encode(title, "UTF-8");
 		URL url = new URL("http://www.imdb.com/xml/find?json=1&nr=1&tt=on&q=" + q);
 		log.info(url.toString());
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		connection.setConnectTimeout(30000);
-		connection.setReadTimeout(30000);
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setConnectTimeout(30000);
+		conn.setReadTimeout(30000);
 
-		if (connection.getResponseCode() == 200) {
-			ImdbFindResult res = mapper.readValue(connection.getInputStream(), ImdbFindResult.class);
-			// TODO take the year into account
-			if (res.titlePopular != null && res.titlePopular.size() > 0) {
-				movie.imdbId = res.titlePopular.get(0).id;
-			} else if (res.titleExact != null && res.titleExact.size() > 0) {
-				log.warning("titlePopular not found for movie: " + title);
-				movie.imdbId = res.titleExact.get(0).id;
-			} else if (res.titleApprox != null && res.titleApprox.size() > 0) {
-				log.warning("titleApprox not found for movie: " + title);
-				movie.imdbId = res.titleApprox.get(0).id;
+		if (conn.getResponseCode() == 200) {
+			ImdbFindResult res = mapper.readValue(conn.getInputStream(),
+					ImdbFindResult.class);
+			ImdbFindResultTitle popular = res.getFirstPopular();
+			ImdbFindResultTitle exact = res.getFirstExact();
+			ImdbFindResultTitle approx = res.getFirstApprox();
+			
+			if (popular != null && exact != null) {
+				if (popular.getYear() >= exact.getYear())
+					movie.imdbId = popular.id;
+				else
+					movie.imdbId = exact.id;
+			} else if (popular != null) {
+				movie.imdbId = popular.id;
+			} else if (exact != null) {
+				movie.imdbId = exact.id;
+			} else if (approx != null) {
+				movie.imdbId = approx.id;
 			} else {
-				log.warning(mapper.writeValueAsString(res));
+				log.warning("No usable id found:" + mapper.writeValueAsString(res));
 			}
 		}
 	}
@@ -60,6 +68,7 @@ public class ImdbParser {
 		String url = "http://www.imdb.com/title/" + movie.imdbId + "/";
 		log.info(url);
 		org.jsoup.Connection connection = Jsoup.connect(url);
+		connection.request().header("Accept-Language", "en-US");
 		connection.timeout(30000);
 		Document doc = connection.get();
 		
