@@ -24,6 +24,9 @@ nav .previous {
 nav .next {
   float: right;
 }
+nav .date {
+  text-align: center;
+}
 .clear {
   clear: both;
 }
@@ -61,7 +64,7 @@ nav .next {
 <nav>
   <a href="#vorige" class="previous">Vorige dag</a>
   <a href="#volgende" class="next">Volgende dag</a>
-  <div class="clear"></div>
+  <div class="date" data-role="date">Vandaag</div>
 </nav>
 <ul class="container" data-role="container">
   <!--
@@ -71,9 +74,10 @@ nav .next {
     <div class="imdbRating">1.2</div>
     <a href="#TODO">Bla</a>
   </li>
--->
+  -->
 </ul>
 <script>
+var dateEl = document.querySelector('[data-role="date"]');
 var container = document.querySelector('[data-role="container"]');
 var today = new Date();
 
@@ -140,6 +144,7 @@ function getDay(day) {
   var date = new Date();
   date.setDate(today.getDate() + day);
   var dateString = '' + date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
+  dateEl.innerHTML = dateString;
   req.open('get', 'http://patheutils.chees.info/data/movies' + dateString + '.json');
   //req.open('get', '/data/mock.json');
   req.send();
