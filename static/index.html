@@ -93,7 +93,9 @@ function init() {
       addMovie(movies[i]);
     }
   };
-  req.open('get', 'http://patheutils.chees.info/data/movies2013-12-23.json');
+  var date = new Date();
+  var dateString = '' + date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
+  req.open('get', 'http://patheutils.chees.info/data/movies' + dateString + '.json');
   //req.open('get', '/data/mock.json');
   req.send();
 }

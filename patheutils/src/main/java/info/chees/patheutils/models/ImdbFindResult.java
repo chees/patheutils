@@ -21,6 +21,7 @@ public class ImdbFindResult {
 	public List<ImdbFindResultTitle> titleApprox;
 
 	public ImdbFindResultTitle getFirstPopular() {
+		// TODO skip if contains "(TV Series"
 		if (titlePopular == null || titlePopular.size() < 1) {
 			log.warning("titlePopular not found");
 			return null;
@@ -29,6 +30,7 @@ public class ImdbFindResult {
 	}
 	
 	public ImdbFindResultTitle getFirstExact() {
+		// TODO skip if contains "(TV Series"
 		if (titleExact == null || titleExact.size() < 1) {
 			log.warning("titleExact not found");
 			return null;
@@ -37,6 +39,7 @@ public class ImdbFindResult {
 	}
 	
 	public ImdbFindResultTitle getFirstApprox() {
+		// TODO skip if contains "(TV Series"
 		if (titleApprox == null || titleApprox.size() < 1)
 			return null;
 		return titleApprox.get(0);
