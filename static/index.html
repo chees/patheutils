@@ -15,6 +15,18 @@ a {
 a:hover {
   color: #00f;
 }
+nav {
+  margin-bottom: 10px;
+}
+nav .previous {
+  float: left;
+}
+nav .next {
+  float: right;
+}
+.clear {
+  clear: both;
+}
 .container {
   padding-left: 0;
 }
@@ -46,6 +58,11 @@ a:hover {
 </head>
 <body>
 <h1>Beste films van Den Haag</h1>
+<nav>
+  <a href="#vorige" class="previous">Vorige dag</a>
+  <a href="#volgende" class="next">Volgende dag</a>
+  <div class="clear"></div>
+</nav>
 <ul class="container" data-role="container">
   <!--
   <li>
@@ -58,6 +75,7 @@ a:hover {
 </ul>
 <script>
 var container = document.querySelector('[data-role="container"]');
+var today = new Date();
 
 function addMovie(m) {
   var li = document.createElement('li');
@@ -85,22 +103,49 @@ function addMovie(m) {
   container.appendChild(li);
 }
 
-function init() {
+function setClickListener(day) {
+  return function(el) {
+    var clone = el.cloneNode(true);
+    // Remove previous listeners:
+    el.parentNode.replaceChild(clone, el);
+
+    clone.addEventListener('click', function(e) {
+      e.preventDefault();
+      getDay(day);
+    }, false);
+  }
+}
+
+function getDay(day) {
+  [].forEach.call(document.getElementsByClassName('previous'),
+    setClickListener(day - 1)
+  );
+  [].forEach.call(document.getElementsByClassName('next'),
+    setClickListener(day + 1)
+  );
+
   var req = new XMLHttpRequest();
   req.onload = function() {
-    var movies = JSON.parse(this.responseText);
-    for (var i = 0; i < movies.length; i++) {
-      addMovie(movies[i]);
+    container.innerHTML = '';
+    if (this.status == 404) {
+      // TODO hide next button
+      // TODO show "not found" text
+    } else {
+      var movies = JSON.parse(this.responseText);
+      for (var i = 0; i < movies.length; i++) {
+        addMovie(movies[i]);
+      }
     }
   };
   var date = new Date();
+  date.setDate(today.getDate() + day);
   var dateString = '' + date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
   req.open('get', 'http://patheutils.chees.info/data/movies' + dateString + '.json');
   //req.open('get', '/data/mock.json');
   req.send();
 }
 
-init();
+getDay(0);
 </script>
 </body>
 </html>
