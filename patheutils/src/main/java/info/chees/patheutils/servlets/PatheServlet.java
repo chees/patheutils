@@ -82,7 +82,7 @@ public class PatheServlet extends HttpServlet {
 		GcsFilename filename = new GcsFilename("patheutils.chees.info", "data/movies" + d + ".json");
 		GcsFileOptions options = new GcsFileOptions.Builder()
 				.mimeType("application/json")
-				.cacheControl("Cache-Control: public, max-age=1") // TODO set higher cache
+				.cacheControl("Cache-Control: public, max-age=3600") // TODO set higher cache?
 				.build();
 		GcsOutputChannel outputChannel = gcsService.createOrReplace(filename, options);
 		ByteBuffer buffer = ByteBuffer.wrap(json.getBytes("UTF-8"));
