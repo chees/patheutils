@@ -6,22 +6,36 @@
 		<servlet-name>pathe</servlet-name>
 		<servlet-class>info.chees.patheutils.servlets.PatheServlet</servlet-class>
 	</servlet>
-	
+
 	<servlet>
 		<servlet-name>cron</servlet-name>
 		<servlet-class>info.chees.patheutils.servlets.CronServlet</servlet-class>
 	</servlet>
-	
+
 	<servlet-mapping>
-	    <servlet-name>pathe</servlet-name>
-	    <url-pattern>/getmovies</url-pattern>
+		<servlet-name>pathe</servlet-name>
+		<url-pattern>/getmovies</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet-mapping>
-	    <servlet-name>cron</servlet-name>
-	    <url-pattern>/cron</url-pattern>
+		<servlet-name>cron</servlet-name>
+		<url-pattern>/cron</url-pattern>
 	</servlet-mapping>
-	
+
+	<security-constraint>
+	    <web-resource-collection>
+	        <web-resource-name>pathe</web-resource-name>
+			<url-pattern>/getmovies</url-pattern>
+	    </web-resource-collection>
+		<web-resource-collection>
+			<web-resource-name>cron</web-resource-name>
+			<url-pattern>/cron</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>admin</role-name>
+		</auth-constraint>
+	</security-constraint>
+
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
