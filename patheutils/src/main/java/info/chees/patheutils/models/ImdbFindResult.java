@@ -17,6 +17,9 @@ public class ImdbFindResult {
 	@JsonProperty("title_exact")
 	public List<ImdbFindResultTitle> titleExact;
 
+	@JsonProperty("title_substring")
+	public List<ImdbFindResultTitle> titleSubstring;
+	
 	@JsonProperty("title_approx")
 	public List<ImdbFindResultTitle> titleApprox;
 
@@ -32,6 +35,10 @@ public class ImdbFindResult {
 		if (t == null)
 			log.warning("titleExact not found");
 		return t;
+	}
+	
+	public ImdbFindResultTitle getFirstSubstring() {
+		return getFirstNonSerie(titleSubstring);
 	}
 	
 	public ImdbFindResultTitle getFirstApprox() {

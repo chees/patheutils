@@ -36,6 +36,7 @@ public class ImdbParser {
 					ImdbFindResult.class);
 			ImdbFindResultTitle popular = res.getFirstPopular();
 			ImdbFindResultTitle exact = res.getFirstExact();
+			ImdbFindResultTitle substring = res.getFirstSubstring();
 			ImdbFindResultTitle approx = res.getFirstApprox();
 			
 			if (popular != null && exact != null) {
@@ -47,6 +48,8 @@ public class ImdbParser {
 				movie.imdbId = popular.id;
 			} else if (exact != null) {
 				movie.imdbId = exact.id;
+			} else if (substring != null) {
+				movie.imdbId = substring.id;
 			} else if (approx != null) {
 				movie.imdbId = approx.id;
 			} else {
