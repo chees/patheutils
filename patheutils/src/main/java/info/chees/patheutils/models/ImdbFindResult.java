@@ -21,27 +21,30 @@ public class ImdbFindResult {
 	public List<ImdbFindResultTitle> titleApprox;
 
 	public ImdbFindResultTitle getFirstPopular() {
-		// TODO skip if contains "(TV Series"
-		if (titlePopular == null || titlePopular.size() < 1) {
+		ImdbFindResultTitle t = getFirstNonSerie(titlePopular);
+		if (t == null)
 			log.warning("titlePopular not found");
-			return null;
-		}
-		return titlePopular.get(0);
+		return t;
 	}
 	
 	public ImdbFindResultTitle getFirstExact() {
-		// TODO skip if contains "(TV Series"
-		if (titleExact == null || titleExact.size() < 1) {
+		ImdbFindResultTitle t = getFirstNonSerie(titleExact);
+		if (t == null)
 			log.warning("titleExact not found");
-			return null;
-		}
-		return titleExact.get(0);
+		return t;
 	}
 	
 	public ImdbFindResultTitle getFirstApprox() {
-		// TODO skip if contains "(TV Series"
-		if (titleApprox == null || titleApprox.size() < 1)
+		return getFirstNonSerie(titleApprox);
+	}
+	
+	private static ImdbFindResultTitle getFirstNonSerie(List<ImdbFindResultTitle> titles) {
+		if (titles == null)
 			return null;
-		return titleApprox.get(0);
+		for (ImdbFindResultTitle t : titles) {
+			if (!t.title.contains("(TV Series"))
+				return t;
+		}
+		return null;
 	}
 }
