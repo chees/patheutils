@@ -42,8 +42,14 @@ public class ImdbFindResult {
 		if (titles == null)
 			return null;
 		for (ImdbFindResultTitle t : titles) {
-			if (!t.title.contains("(TV Series"))
+			// Movies have this format: "2013, Peter Jackson"
+			// Or this: "2013/I, Chris Buck..."
+			// Others don't have the comma: "1999 TV series documentary"
+			// Ahw yeah, robust scraping ftw
+			String[] words = t.description.split(" ");
+			if (words.length > 0 && words[0].endsWith(","))
 				return t;
+			log.warning("skipping " + t.title + " " + t.description);
 		}
 		return null;
 	}
