@@ -8,6 +8,6 @@
 			<Method>GET</Method>
 			<Method>HEAD</Method>
 		</Methods>
-		<MaxAgeSec>1800</MaxAgeSec>
+		<MaxAgeSec>3600</MaxAgeSec>
 	</Cors>
 </CorsConfig>
