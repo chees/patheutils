@@ -17,7 +17,7 @@ a:hover {
   color: #00f;
 }
 nav {
-  margin: 0 -8px 10px -8px;
+  margin: 0 -8px;
   background-color: #e3e3e3;
   padding: 10px;
 }
@@ -36,6 +36,9 @@ nav a:hover {
   color: #333;
   background-color: #b2b2b2;
 }
+ul {
+  margin-top: 8px;
+}
 .clear {
   clear: both;
 }
@@ -46,6 +49,7 @@ nav a:hover {
   clear: both;
   position: relative;
   min-height: 100px;
+  margin-bottom: 20px;
 }
 .container img {
   float: left;
@@ -56,15 +60,27 @@ nav a:hover {
 .container h2 {
   background-color: #ffc426;
   padding: 2px;
+  font-size: 110%;
+  margin-left: 80px;
   box-shadow: 5px 5px 10px #ccc;
 }
 .container .imdbRating {
+  font-size: 110%;
   font-weight: bold;
+  margin: 15px;
 }
 .container a {
-  position: absolute;
-  bottom: 0;
-  font-size: 80%;
+  font-size: 70%;
+  padding: 4px 6px;
+  margin-right: 6px;
+  background-color: #111;
+  color: #fff;
+  border-radius: 4px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.container a:hover {
+  background-color: #666;
 }
 footer {
   background-color: #e3e3e3;
@@ -87,13 +103,14 @@ footer {
     <img src="thumbnail.jpg">
     <h2>Bla</h2>
     <div class="imdbRating">1.2</div>
-    <a href="#TODO">Bla</a>
+    <a href="#">IMDb</a>
+    <a href="#">Pathé</a>
   </li>
   -->
 </ul>
 <footer>
-  Gemaakt door
-  <a href="https://twitter.com/christiaanhees">Christiaan Hees</a>
+  <p>Gemaakt door <a href="https://twitter.com/christiaanhees">Christiaan Hees</a>.</p>
+  <p>Pro tip: bookmark deze pagina en zet hem op je home screen van je telefoon. Who needs apps anyway?</p>
 </footer>
 <script>
 var dateEl = document.querySelector('[data-role="date"]');
@@ -117,11 +134,11 @@ function addMovie(m) {
   imdbRating.appendChild(document.createTextNode(m.rating));
   li.appendChild(imdbRating);
 
-  var a = document.createElement('a');
-  a.href = 'http://www.imdb.com/title/' + m.imdbId + '/';
+  var imdb = document.createElement('a');
+  imdb.href = 'http://www.imdb.com/title/' + m.imdbId + '/';
   var imdbTitle = m.imdbTitle.substring(0, m.imdbTitle.length - 7);
-  a.appendChild(document.createTextNode(imdbTitle));
-  li.appendChild(a);
+  imdb.appendChild(document.createTextNode('IMDb'));
+  li.appendChild(imdb);
 
   container.appendChild(li);
 }
