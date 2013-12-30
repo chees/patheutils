@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Beste films in Pathé Den Haag</title>
   <meta name="viewport" content="width=device-width">
+  <link rel="apple-touch-icon" href="icon.png">
   <style>
 body {
   font-family: 'Open Sans', sans-serif;
@@ -185,7 +186,7 @@ function getDayName(date) {
 
 function initNav() {
   var nav = document.querySelector('nav');
-  for (var i = 0; i < 7; i++) {
+  for (var i = 0; i < 6; i++) {
     var date = new Date();
     date.setDate(today.getDate() + i);
     var a = document.createElement('a');
