@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Beste films van Den Haag</title>
+  <title>Beste films in Pathe Den Haag</title>
   <meta name="viewport" content="width=device-width">
   <style>
 body {
@@ -17,15 +17,21 @@ a:hover {
 }
 nav {
   margin-bottom: 10px;
+  background-color: #e3e3e3;
+  padding: 10px;
 }
-nav .previous {
-  float: left;
+nav a {
+  text-transform: uppercase;
+  color: #666;
+  font-size: 75%;
+  font-weight: bold;
+  padding: 3px 8px;
+  text-decoration: none;
 }
-nav .next {
-  float: right;
-}
-nav .date {
-  text-align: center;
+nav a:hover {
+  border-radius: 10px;
+  color: #333;
+  background-color: #b2b2b2;
 }
 .clear {
   clear: both;
@@ -57,14 +63,18 @@ nav .date {
   bottom: 0;
   font-size: 80%;
 }
+footer {
+  background-color: #e3e3e3;
+}
   </style>
 </head>
 <body>
-<h1>Beste films van Den Haag</h1>
+<h1>Beste films in Pathe Den Haag</h1>
 <nav>
-  <a href="#vorige" class="previous">Vorige dag</a>
-  <a href="#volgende" class="next">Volgende dag</a>
-  <div class="date" data-role="date">Vandaag</div>
+  <!--
+  <a href="#">vandaag</a>
+  <a href="#">morgen</a>
+  -->
 </nav>
 <ul class="container" data-role="container">
   <!--
@@ -76,6 +86,10 @@ nav .date {
   </li>
   -->
 </ul>
+<footer>
+  Gemaakt door
+  <a href="https://twitter.com/christiaanhees">Christiaan Hees</a>
+</footer>
 <script>
 var dateEl = document.querySelector('[data-role="date"]');
 var container = document.querySelector('[data-role="container"]');
@@ -107,32 +121,11 @@ function addMovie(m) {
   container.appendChild(li);
 }
 
-function setClickListener(day) {
-  return function(el) {
-    var clone = el.cloneNode(true);
-    // Remove previous listeners:
-    el.parentNode.replaceChild(clone, el);
-
-    clone.addEventListener('click', function(e) {
-      e.preventDefault();
-      getDay(day);
-    }, false);
-  }
-}
-
 function getDay(day) {
-  [].forEach.call(document.getElementsByClassName('previous'),
-    setClickListener(day - 1)
-  );
-  [].forEach.call(document.getElementsByClassName('next'),
-    setClickListener(day + 1)
-  );
-
   var req = new XMLHttpRequest();
   req.onload = function() {
     container.innerHTML = '';
     if (this.status == 404) {
-      // TODO hide next button
       // TODO show "not found" text
     } else {
       var movies = JSON.parse(this.responseText);
@@ -143,13 +136,50 @@ function getDay(day) {
   };
   var date = new Date();
   date.setDate(today.getDate() + day);
-  var dateString = '' + date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
-  dateEl.innerHTML = dateString;
+  var dateString = '' + date.getFullYear() + '-' + pad((date.getMonth()+1)) + '-' + pad(date.getDate());
   req.open('get', 'http://patheutils.chees.info/data/movies' + dateString + '.json');
   //req.open('get', '/data/mock.json');
   req.send();
 }
 
+function pad(s) {
+  if ((''+s).length < 2)
+    return '0' + s;
+  return s
+}
+
+function getDayName(date) {
+  if (Math.abs(date.getTime() - today.getTime()) < 10)
+    return 'vandaag';
+
+  var tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
+  if (Math.abs(date.getTime() - tomorrow.getTime()) < 10)
+    return 'morgen'
+
+  var days = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];
+  return days[date.getDay()];
+}
+
+function initNav() {
+  var nav = document.querySelector('nav');
+  for (var i = 0; i < 7; i++) {
+    var date = new Date();
+    date.setDate(today.getDate() + i);
+    var a = document.createElement('a');
+    var dayName = getDayName(date);
+    a.href = '#' + dayName;
+    a.innerHTML = dayName;
+    a.setAttribute('data-day', i);
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      getDay(1*e.target.getAttribute('data-day'));
+    }, false);
+    nav.appendChild(a);
+  }
+}
+
+initNav();
 getDay(0);
 </script>
 </body>
