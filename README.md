@@ -1,6 +1,6 @@
 Run scraper locally:
 
-	cd patheutils
+    cd patheutils
     mvn appengine:devserver
 
 Run site locally:
@@ -16,7 +16,7 @@ Setup Google Cloud Storage bucket:
 
 Deploy scraper:
 
-	cd patheutils
+    cd patheutils
     mvn appengine:update
     open http://patheutils.appspot.com/cron
 

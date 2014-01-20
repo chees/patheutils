@@ -16,6 +16,7 @@ import org.jsoup.select.Elements;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+// TODO cache results
 public class ImdbParser {
 
 	private static final Logger log = Logger.getLogger(ImdbParser.class.getName());
@@ -32,8 +33,7 @@ public class ImdbParser {
 		conn.setReadTimeout(30000);
 
 		if (conn.getResponseCode() == 200) {
-			ImdbFindResult res = mapper.readValue(conn.getInputStream(),
-					ImdbFindResult.class);
+			ImdbFindResult res = mapper.readValue(conn.getInputStream(), ImdbFindResult.class);
 			ImdbFindResultTitle popular = res.getFirstPopular();
 			ImdbFindResultTitle exact = res.getFirstExact();
 			ImdbFindResultTitle substring = res.getFirstSubstring();
@@ -79,7 +79,9 @@ public class ImdbParser {
 		if (titles.size() < 1) {
 			log.warning("title not found");
 		} else {
-			movie.imdbTitle = titles.get(0).text();
+			// strip " - IMDb"
+			String title = titles.get(0).text();
+			movie.imdbTitle = title.substring(0, title.length() - 7);
 		}
 		
 		Elements ratings = doc.select(".star-box-giga-star");
@@ -91,4 +93,3 @@ public class ImdbParser {
 		}
 	}
 }
-

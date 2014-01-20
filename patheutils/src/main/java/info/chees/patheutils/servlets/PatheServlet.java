@@ -67,7 +67,7 @@ public class PatheServlet extends HttpServlet {
 		}
 		
 		String json = mapper.writeValueAsString(movies);
-		
+		//System.out.println(json);
 		writeToGCS(json, date);
 		
 		resp.setContentType("text/plain");

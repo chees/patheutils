@@ -1,6 +1,7 @@
 package info.chees.patheutils;
 
 import info.chees.patheutils.models.Movie;
+import info.chees.patheutils.models.Show;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -13,7 +14,6 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 public class PatheParser {
 	private static final Logger log = Logger.getLogger(PatheParser.class.getName());
@@ -28,14 +28,49 @@ public class PatheParser {
 		connection.timeout(30000);
 		Document doc = connection.get();
 		
-		Elements elems = doc.select(".movie-highlight.bioscoopagenda");
 		List<Movie> result = new ArrayList<Movie>();
-		for (Element e : elems) {
+		
+		for (Element e : doc.select(".movie-highlight.bioscoopagenda")) {
 			String title = e.select("div.heading h3 a").get(0).text();
 			String thumbnail = e.select("a img").get(0).attr("abs:src");
-			result.add(new Movie(title, thumbnail));
+			Movie movie = new Movie(title, thumbnail);
+			
+			movie.shows = getShows(e.nextElementSibling());
+			
+			result.add(movie);
 		}
 		
 		return result;
+	}
+	
+	private static List<Show> getShows(Element table) {
+		List<Show> shows = new ArrayList<Show>();
+		
+		for (Element locEl : table.select("tr table tr")) {
+			String location = locEl.select("th a").get(0).ownText();
+			for (Element a : locEl.select("td a")) {
+				String[] timeSplit = a.ownText().split(" ", 2);
+				String time = timeSplit[0];
+				
+				String type = null;
+				if (timeSplit.length > 1)
+					type = timeSplit[1];
+				else if (a.children().size() > 0)
+					type = a.child(0).text();
+				
+				String href = a.attr("href");
+				
+				String url = null;
+				// For some shows you can't get tickets online:
+				if (href.startsWith("javascript:openPopup("))
+					url = "http://www.pathe.nl" + href.substring(22, href.length() - 2);
+				
+				Show show = new Show(location, time, type, url);
+				log.info("Show: " + show);
+				shows.add(show);
+			}
+		}
+		
+		return shows;
 	}
 }

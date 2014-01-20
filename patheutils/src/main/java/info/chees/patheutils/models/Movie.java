@@ -1,11 +1,14 @@
 package info.chees.patheutils.models;
 
+import java.util.List;
+
 public class Movie implements Comparable<Movie> {
 	public String title;
 	public String thumbnail;
 	public String imdbId;
 	public String imdbTitle;
 	public float rating;
+	public List<Show> shows;
 	
 	public Movie(String title, String thumbnail) {
 		this.title = title;
