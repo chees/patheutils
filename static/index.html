@@ -9,7 +9,7 @@
 body {
   font-family: 'Open Sans', sans-serif;
   padding: 0;
-  margin: 0 8px;
+  margin: 0;
 }
 a {
   color: #321;
@@ -18,9 +18,9 @@ a:hover {
   color: #00f;
 }
 nav {
-  margin: 0 -8px;
+  margin: 0;
   background-color: #e3e3e3;
-  padding: 10px;
+  padding: 10px 0;
 }
 nav a {
   text-transform: uppercase;
@@ -28,8 +28,8 @@ nav a {
   color: #666;
   font-size: 75%;
   font-weight: bold;
-  padding: 3px 8px;
-  margin: 1px;
+  padding: 4px 8px;
+  margin: 1px 2px;
 }
 nav a.selected,
 nav a:hover {
@@ -37,56 +37,60 @@ nav a:hover {
   color: #333;
   background-color: #b2b2b2;
 }
-ul {
-  margin-top: 8px;
-}
 .clear {
   clear: both;
 }
 .container {
-  padding-left: 0;
+  margin: 0;
+  padding: 0;
 }
 .container li {
   clear: both;
   position: relative;
   min-height: 100px;
   margin-bottom: 20px;
+  list-style-type: none;
 }
 .container img {
   float: left;
   width: 75px;
   height: 100px;
-  margin: 0 10px 10px 0;
+  margin: 0 0 10px 0;
 }
 .container h2 {
   background-color: #ffc426;
-  padding: 2px;
-  font-size: 110%;
-  margin-left: 80px;
-  box-shadow: 5px 5px 10px #ccc;
+  padding: 3px;
+  font-size: 80%;
+  margin: 0 0 0 75px;
 }
 .container .imdbRating {
-  font-size: 110%;
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  font-size: 100%;
   font-weight: bold;
-  margin: 15px;
+  padding: 2px;
+  color: #fff;
+  background-color: rgba(0,0,0,.8);
 }
-.container a {
+.container .imdb {
+  position: absolute;
+  bottom: 2px;
+  left: 33px;
   font-size: 70%;
   padding: 4px 6px;
-  margin-right: 6px;
-  background-color: #111;
   color: #fff;
-  border-radius: 4px;
+  background-color: rgba(0,0,0,.8);
   text-transform: uppercase;
   text-decoration: none;
 }
 .container a:hover {
-  background-color: #666;
+  background-color: rgba(128,128,128,.8);
 }
 footer {
   background-color: #e3e3e3;
-  padding: 10px;
-  margin: 0 -8px;
+  padding: 2px 12px;
+  margin: 0px;
 }
   </style>
 </head>
@@ -130,14 +134,17 @@ function addMovie(m) {
   h2.appendChild(document.createTextNode(m.title));
   li.appendChild(h2);
 
-  var imdbRating = document.createElement('div');
-  imdbRating.className = 'imdbRating';
-  imdbRating.appendChild(document.createTextNode(m.rating));
-  li.appendChild(imdbRating);
+  if (m.rating != 0) {
+    var imdbRating = document.createElement('div');
+    imdbRating.className = 'imdbRating';
+    imdbRating.appendChild(document.createTextNode(m.rating));
+    li.appendChild(imdbRating);
+  }
 
   var imdb = document.createElement('a');
+  imdb.className = 'imdb';
   imdb.href = 'http://www.imdb.com/title/' + m.imdbId + '/';
-  var imdbTitle = m.imdbTitle.substring(0, m.imdbTitle.length - 7);
+  //var imdbTitle = m.imdbTitle.substring(0, m.imdbTitle.length - 7);
   imdb.appendChild(document.createTextNode('IMDb'));
   li.appendChild(imdb);
 
