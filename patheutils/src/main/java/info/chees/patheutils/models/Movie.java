@@ -24,6 +24,9 @@ public class Movie implements Comparable<Movie> {
 	public int compareTo(Movie other) {
 		if (other == null)
 			return -1;
-		return Float.compare(other.rating, this.rating);
+		int c = Float.compare(other.rating, this.rating);
+		if (c == 0)
+			return title.compareTo(other.title);
+		return c;
 	}
 }
