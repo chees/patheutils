@@ -44,7 +44,7 @@ nav a:hover {
   margin: 0;
   padding: 0;
 }
-.container li {
+.container>li {
   clear: both;
   position: relative;
   min-height: 100px;
@@ -81,11 +81,29 @@ nav a:hover {
   padding: 4px 6px;
   color: #fff;
   background-color: rgba(0,0,0,.8);
-  text-transform: uppercase;
   text-decoration: none;
 }
 .container a:hover {
   background-color: rgba(128,128,128,.8);
+}
+.container ul {
+  padding: 0;
+}
+.container .location {
+  list-style-type: none;
+  font-size: 80%;
+  margin: 10px 0 10px 80px;
+}
+.container .location a {
+  padding: 3px;
+  margin: 4px;
+  background-color: #e3e3e3;
+  text-decoration: none;
+  border-radius: 8px;
+}
+.container .location a:hover {
+  color: #333;
+  background-color: #b2b2b2;
 }
 footer {
   background-color: #e3e3e3;
@@ -109,7 +127,6 @@ footer {
     <h2>Bla</h2>
     <div class="imdbRating">1.2</div>
     <a href="#">IMDb</a>
-    <a href="#">Pathé</a>
   </li>
   -->
 </ul>
@@ -122,12 +139,12 @@ var dateEl = document.querySelector('[data-role="date"]');
 var container = document.querySelector('[data-role="container"]');
 var today = new Date();
 
+// TODO de-uglify:
 function addMovie(m) {
   var li = document.createElement('li');
 
   var img = new Image();
   img.src = m.thumbnail;
-  //img.src = "thumbnail.jpg";
   li.appendChild(img);
 
   var h2 = document.createElement('h2');
@@ -144,9 +161,28 @@ function addMovie(m) {
   var imdb = document.createElement('a');
   imdb.className = 'imdb';
   imdb.href = 'http://www.imdb.com/title/' + m.imdbId + '/';
-  //var imdbTitle = m.imdbTitle.substring(0, m.imdbTitle.length - 7);
   imdb.appendChild(document.createTextNode('IMDb'));
   li.appendChild(imdb);
+
+  // Locations:
+  var ul = document.createElement('ul');
+  for (var i = 0; i < m.locations.length; i++) {
+    var l = m.locations[i]
+    var lEl = document.createElement('li');
+    lEl.className = 'location';
+    lEl.appendChild(document.createTextNode(m.locations[i].name.substring(6)));
+    
+    // Shows:
+    for (var j = 0; j < l.shows.length; j++) {
+      var s = document.createElement('a');
+      s.href = l.shows[j].url;
+      s.appendChild(document.createTextNode(l.shows[j].time));
+      lEl.appendChild(s);
+    }
+
+    ul.appendChild(lEl);
+  }
+  li.appendChild(ul);
 
   container.appendChild(li);
 }
@@ -211,6 +247,9 @@ function initNav() {
         links[l].className = '';
       }
       this.className = 'selected';
+
+      // TODO animation?
+      // document.getElementsByTagName('ul')[0].style.webkitTransform = "scaleX(.5) translateX(-50%)"
 
       getDay(1*this.getAttribute('data-day'));
     }, false);
