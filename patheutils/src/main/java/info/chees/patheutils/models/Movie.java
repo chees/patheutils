@@ -8,7 +8,7 @@ public class Movie implements Comparable<Movie> {
 	public String imdbId;
 	public String imdbTitle;
 	public float rating;
-	public List<Show> shows;
+	public List<Location> locations;
 	
 	public Movie(String title, String thumbnail) {
 		this.title = title;

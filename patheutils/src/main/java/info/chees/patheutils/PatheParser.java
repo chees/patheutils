@@ -1,5 +1,6 @@
 package info.chees.patheutils;
 
+import info.chees.patheutils.models.Location;
 import info.chees.patheutils.models.Movie;
 import info.chees.patheutils.models.Show;
 
@@ -14,6 +15,7 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class PatheParser {
 	private static final Logger log = Logger.getLogger(PatheParser.class.getName());
@@ -34,43 +36,48 @@ public class PatheParser {
 			String title = e.select("div.heading h3 a").get(0).text();
 			String thumbnail = e.select("a img").get(0).attr("abs:src");
 			Movie movie = new Movie(title, thumbnail);
-			
-			movie.shows = getShows(e.nextElementSibling());
-			
+			movie.locations = getLocations(e.nextElementSibling());
 			result.add(movie);
 		}
 		
 		return result;
 	}
 	
-	private static List<Show> getShows(Element table) {
-		List<Show> shows = new ArrayList<Show>();
+	private static List<Location> getLocations(Element table) {
+		List<Location> locations = new ArrayList<Location>();
 		
 		for (Element locEl : table.select("tr table tr")) {
-			String location = locEl.select("th a").get(0).ownText();
-			for (Element a : locEl.select("td a")) {
-				String[] timeSplit = a.ownText().split(" ", 2);
-				String time = timeSplit[0];
-				
-				String type = null;
-				if (timeSplit.length > 1)
-					type = timeSplit[1];
-				else if (a.children().size() > 0)
-					type = a.child(0).text();
-				
-				String href = a.attr("href");
-				
-				String url = null;
-				// For some shows you can't get tickets online:
-				if (href.startsWith("javascript:openPopup("))
-					url = "http://www.pathe.nl" + href.substring(22, href.length() - 2);
-				
-				Show show = new Show(location, time, type, url);
-				log.info("Show: " + show);
-				shows.add(show);
-			}
+			Location location = new Location(locEl.select("th a").get(0).ownText());
+			location.shows = getShows(locEl.select("td a"));
+			locations.add(location);
 		}
 		
+		return locations;
+	}
+	
+	private static List<Show> getShows(Elements elems) {
+		List<Show> shows = new ArrayList<Show>();
+		for (Element a : elems) {
+			String[] timeSplit = a.ownText().split(" ", 2);
+			String time = timeSplit[0];
+			
+			String type = null;
+			if (timeSplit.length > 1)
+				type = timeSplit[1];
+			else if (a.children().size() > 0)
+				type = a.child(0).text();
+			
+			String href = a.attr("href");
+			
+			String url = null;
+			// For some shows you can't get tickets online:
+			if (href.startsWith("javascript:openPopup("))
+				url = "http://www.pathe.nl" + href.substring(22, href.length() - 2);
+			
+			Show show = new Show(time, type, url);
+			log.info("Show: " + show);
+			shows.add(show);
+		}
 		return shows;
 	}
 }
