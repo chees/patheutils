@@ -14,9 +14,6 @@ body {
 a {
   color: #321;
 }
-a:hover {
-  color: #00f;
-}
 nav {
   margin: 0;
   background-color: #e3e3e3;
@@ -36,6 +33,39 @@ nav a:hover {
   border-radius: 10px;
   color: #333;
   background-color: #b2b2b2;
+}
+.spinContainer {
+  position: relative;
+  padding: 50px 0;
+}
+.spinner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  left: 50%;
+  margin: -10px;
+  background-color: #b2b2b2;
+  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.3) inset;
+  border-radius: 50%;
+}
+.spinner:after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 2.66667px;
+  background-color: #fff;
+  height: 4px;
+  width: 4px;
+  /* TODO try in non webkit browsers */
+  -webkit-animation: spin 1s linear infinite;
+  border-radius: 50%;
+  -webkit-transform-origin: 7.33333px;
+}
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
 .container {
   margin: 0;
@@ -92,6 +122,7 @@ nav a:hover {
   margin: 4px 0;
   vertical-align: top;
   text-align: left;
+  font-weight: normal;
 }
 .container .locations a {
   padding: 3px;
@@ -118,6 +149,9 @@ footer {
   <a href="#">morgen</a>
   -->
 </nav>
+<div class="spinContainer">
+  <div class="spinner"></div>
+</div>
 <ul class="container" data-role="container">
   <!--
   <li>
@@ -129,8 +163,13 @@ footer {
   -->
 </ul>
 <footer>
-  <p>Gemaakt door <a href="https://twitter.com/christiaanhees">Christiaan Hees</a>.</p>
-  <p>Pro tip: bookmark deze pagina en zet hem op je home screen van je telefoon. Who needs apps anyway?</p>
+  <p>
+    Gemaakt door <a href="https://twitter.com/christiaanhees">Christiaan Hees</a>.<br>
+    Source op <a href="https://github.com/chees/patheutils">GitHub</a>.
+  </p>
+  <p>
+    Pro tip: bookmark deze pagina en zet hem op je home screen van je telefoon. Who needs apps anyway?
+  </p>
 </footer>
 <script>
 var dateEl = document.querySelector('[data-role="date"]');
@@ -219,6 +258,7 @@ function isPassed(time, day) {
 function getDay(day) {
   var req = new XMLHttpRequest();
   req.onload = function() {
+    document.getElementsByClassName('spinContainer')[0].style.display = 'none';
     container.innerHTML = '';
     if (this.status == 404) {
       // TODO show "not found" text
