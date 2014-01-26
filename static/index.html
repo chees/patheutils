@@ -49,7 +49,7 @@ nav a:hover {
   box-shadow: 0 2px 1px rgba(0, 0, 0, 0.3) inset;
   border-radius: 50%;
 }
-.spinner:after {
+.spinDot {
   content: '';
   position: absolute;
   top: 8px;
@@ -57,13 +57,13 @@ nav a:hover {
   background-color: #fff;
   height: 4px;
   width: 4px;
-  /* TODO try in non webkit browsers */
-  -webkit-animation: spin 1s linear infinite;
   border-radius: 50%;
   -webkit-transform-origin: 7.33333px;
+  /* TODO make it work in non webkit browsers */
+  -webkit-animation: spin 1s linear infinite;
 }
 @-webkit-keyframes spin {
-  100% {
+  to {
     -webkit-transform: rotate(360deg);
   }
 }
@@ -150,7 +150,9 @@ footer {
   -->
 </nav>
 <div class="spinContainer">
-  <div class="spinner"></div>
+  <div class="spinner">
+    <div class="spinDot"></div>
+  </div>
 </div>
 <ul class="container" data-role="container">
   <!--
