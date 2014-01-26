@@ -37,9 +37,6 @@ nav a:hover {
   color: #333;
   background-color: #b2b2b2;
 }
-.clear {
-  clear: both;
-}
 .container {
   margin: 0;
   padding: 0;
@@ -83,25 +80,25 @@ nav a:hover {
   background-color: rgba(0,0,0,.8);
   text-decoration: none;
 }
-.container a:hover {
+.container .imdb:hover {
   background-color: rgba(128,128,128,.8);
 }
-.container ul {
-  padding: 0;
-}
-.container .location {
-  list-style-type: none;
+.container .locations {
   font-size: 80%;
-  margin: 10px 0 10px 80px;
+  line-height: 200%;
 }
-.container .location a {
+.container .locations th {
+  width: 7em;
+  margin: 4px 0;
+  vertical-align: top;
+}
+.container .locations a {
   padding: 3px;
-  margin: 4px;
   background-color: #e3e3e3;
   text-decoration: none;
   border-radius: 8px;
 }
-.container .location a:hover {
+.container .locations a:hover {
   color: #333;
   background-color: #b2b2b2;
 }
@@ -158,33 +155,46 @@ function addMovie(m) {
     li.appendChild(imdbRating);
   }
 
-  var imdb = document.createElement('a');
-  imdb.className = 'imdb';
-  imdb.href = 'http://www.imdb.com/title/' + m.imdbId + '/';
-  imdb.appendChild(document.createTextNode('IMDb'));
-  li.appendChild(imdb);
-
-  // Locations:
-  var ul = document.createElement('ul');
-  for (var i = 0; i < m.locations.length; i++) {
-    var l = m.locations[i]
-    var lEl = document.createElement('li');
-    lEl.className = 'location';
-    lEl.appendChild(document.createTextNode(m.locations[i].name.substring(6)));
-    
-    // Shows:
-    for (var j = 0; j < l.shows.length; j++) {
-      var s = document.createElement('a');
-      s.href = l.shows[j].url;
-      s.appendChild(document.createTextNode(l.shows[j].time));
-      lEl.appendChild(s);
-    }
-
-    ul.appendChild(lEl);
+  if (m.imdbId != null) {
+    var imdb = document.createElement('a');
+    imdb.className = 'imdb';
+    imdb.href = 'http://www.imdb.com/title/' + m.imdbId + '/';
+    imdb.appendChild(document.createTextNode('IMDb'));
+    li.appendChild(imdb);
   }
-  li.appendChild(ul);
+
+  li.appendChild(renderLocations(m.locations));
 
   container.appendChild(li);
+}
+
+function renderLocations(locations) {
+  var table = document.createElement('table');
+  table.className = 'locations';
+
+  for (var i = 0; i < locations.length; i++) {
+    var l = locations[i];
+    var tr = document.createElement('tr');
+    
+    var th = document.createElement('th');
+    th.appendChild(document.createTextNode(l.name.substring(6)));
+    tr.appendChild(th);
+    
+    var td = document.createElement('td');
+    for (var j = 0; j < l.shows.length; j++) {
+      if (j > 0)
+        td.appendChild(document.createTextNode(' '));
+      var a = document.createElement('a');
+      a.href = l.shows[j].url;
+      a.appendChild(document.createTextNode(l.shows[j].time));
+      td.appendChild(a);
+    }
+    tr.appendChild(td);
+
+    table.appendChild(tr);
+  }
+
+  return table;
 }
 
 function getDay(day) {
