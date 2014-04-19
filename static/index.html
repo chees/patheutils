@@ -295,11 +295,13 @@ function isPassed(time, day) {
 
 function getDay(day) {
   spinContainer.style.display = 'block';
-  container.innerHTML = '';
+  container.style.visibility = 'hidden';
   container.className = 'container';
   var req = new XMLHttpRequest();
   req.onload = function() {
     var that = this;
+    container.innerHTML = '';
+    container.style.visibility = 'visible';
     spinContainer.style.display = 'none';
     if (that.status == 404) {
       // TODO show "not found" text
