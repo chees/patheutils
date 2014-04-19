@@ -63,8 +63,11 @@ nav a:hover {
   -webkit-animation: spin 1s linear infinite;
 }
 @-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(90deg);
+  }
   to {
-    -webkit-transform: rotate(360deg);
+    -webkit-transform: rotate(450deg);
   }
 }
 .container {
@@ -134,6 +137,17 @@ nav a:hover {
   color: #333;
   background-color: #b2b2b2;
 }
+.container.in {
+  -webkit-animation: in 1s;
+}
+@-webkit-keyframes in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 footer {
   background-color: #e3e3e3;
   padding: 2px 12px;
@@ -148,7 +162,7 @@ footer {
   <a href="#">morgen</a>
   -->
 </nav>
-<div class="spinContainer">
+<div class="spinContainer" data-role="spinContainer">
   <div class="spinner">
     <div class="spinDot"></div>
   </div>
@@ -173,7 +187,7 @@ footer {
   </p>
 </footer>
 <script>
-var dateEl = document.querySelector('[data-role="date"]');
+var spinContainer = document.querySelector('[data-role="spinContainer"]');
 var container = document.querySelector('[data-role="container"]');
 var today = new Date();
 
@@ -257,18 +271,23 @@ function isPassed(time, day) {
 }
 
 function getDay(day) {
+  spinContainer.style.display = 'block';
+  container.innerHTML = '';
+  container.className = 'container';
   var req = new XMLHttpRequest();
   req.onload = function() {
-    document.getElementsByClassName('spinContainer')[0].style.display = 'none';
-    container.innerHTML = '';
-    if (this.status == 404) {
+    var that = this;
+    spinContainer.style.display = 'none';
+    if (that.status == 404) {
       // TODO show "not found" text
     } else {
-      var movies = JSON.parse(this.responseText);
+      var movies = JSON.parse(that.responseText);
       for (var i = 0; i < movies.length; i++) {
         addMovie(movies[i], day);
       }
+      // TODO if no movies are left for today -> display msg
     }
+    container.className = 'container in';
   };
   var date = new Date();
   date.setDate(today.getDate() + day);
@@ -317,10 +336,6 @@ function initNav() {
         links[l].className = '';
       }
       this.className = 'selected';
-
-      // TODO animation?
-      // document.getElementsByTagName('ul')[0].style.webkitTransform = "scaleX(.5) translateX(-50%)"
-
       getDay(1*this.getAttribute('data-day'));
     }, false);
     nav.appendChild(a);
