@@ -14,6 +14,11 @@ public class ImdbFindResultTitle {
 	*/
 	
 	public int getYear() {
-		return Integer.parseInt(description.substring(0, 4));
+		try {
+			// apparently this can also be "????"
+			return Integer.parseInt(description.substring(0, 4));
+		} catch (NumberFormatException e) {
+			return 0;
+		}
 	}
 }
