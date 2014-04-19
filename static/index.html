@@ -195,28 +195,31 @@ var today = new Date();
 function addMovie(m, day) {
   var li = document.createElement('li');
 
+  // Thumbnail and rating
   var img = new Image();
   img.src = m.thumbnail;
-  li.appendChild(img);
-
-  var h2 = document.createElement('h2');
-  h2.appendChild(document.createTextNode(m.title));
-  li.appendChild(h2);
 
   if (m.rating != 0) {
     var imdbRating = document.createElement('div');
     imdbRating.className = 'imdbRating';
     imdbRating.appendChild(document.createTextNode(m.rating));
-    li.appendChild(imdbRating);
   }
 
   if (m.imdbId != null) {
     var imdb = document.createElement('a');
-    imdb.className = 'imdb';
     imdb.href = 'http://www.imdb.com/title/' + m.imdbId + '/';
-    imdb.appendChild(document.createTextNode('IMDb'));
+    imdb.appendChild(img);
+    imdb.appendChild(imdbRating);
     li.appendChild(imdb);
+  } else {
+    li.appendChild(img);
+    li.appendChild(imdbRating);
   }
+
+  // Title and times
+  var h2 = document.createElement('h2');
+  h2.appendChild(document.createTextNode(m.title));
+  li.appendChild(h2);
 
   li.appendChild(renderLocations(m.locations, day));
 
