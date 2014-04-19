@@ -18,6 +18,7 @@ nav {
   margin: 0;
   background-color: #e3e3e3;
   padding: 10px 0;
+  text-align: center;
 }
 nav a {
   text-transform: uppercase;
@@ -71,8 +72,9 @@ nav a:hover {
   }
 }
 .container {
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
+  max-width: 500px;
 }
 .container>li {
   clear: both;
@@ -153,6 +155,24 @@ footer {
   padding: 2px 12px;
   margin: 0px;
 }
+
+@media screen and (min-width: 640px) {
+  .container>li {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  .container h2 {
+    margin-left: 85px;
+    padding: 5px;
+  }
+  .container .locations {
+    margin-left: 85px;
+  }
+  .container .locations a {
+    padding: 4px 6px;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -209,11 +229,11 @@ function addMovie(m, day) {
     var imdb = document.createElement('a');
     imdb.href = 'http://www.imdb.com/title/' + m.imdbId + '/';
     imdb.appendChild(img);
-    imdb.appendChild(imdbRating);
+    if (imdbRating) imdb.appendChild(imdbRating);
     li.appendChild(imdb);
   } else {
     li.appendChild(img);
-    li.appendChild(imdbRating);
+    if (imdbRating) li.appendChild(imdbRating);
   }
 
   // Title and times
