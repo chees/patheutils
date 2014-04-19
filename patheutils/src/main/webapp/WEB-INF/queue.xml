@@ -4,5 +4,10 @@
 		<name>movies</name>
 		<rate>1/s</rate>
 		<max-concurrent-requests>1</max-concurrent-requests>
+		<retry-parameters>
+			<min-backoff-seconds>60</min-backoff-seconds>
+			<task-retry-limit>3</task-retry-limit>
+			<task-age-limit>1h</task-age-limit>
+		</retry-parameters>
 	</queue>
 </queue-entries>
