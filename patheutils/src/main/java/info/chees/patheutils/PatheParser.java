@@ -73,8 +73,8 @@ public class PatheParser {
 			);
 			log.info("Show: " + show);
 			movie.locations.get(0).shows.add(show);
-			result.add(movie);
 		}
+		result.addAll(byTitle.values());
 
 		return result;
 	}
