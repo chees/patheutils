@@ -23,7 +23,7 @@ public class PatheParser {
 	public static List<Movie> getMovies(Date date) throws IOException {
 		String dateString = new SimpleDateFormat("dd-MM-yyyy").format(date);
 		//String dateString = "24-12-2013";
-		String url = "http://www.pathe.nl/bioscoopagenda/denhaag/" + dateString;
+		String url = "http://www.pathe.nl/bioscoopagenda/denhaag?date=" + dateString;
 		log.info(url);
 		
 		Connection connection = Jsoup.connect(url);
@@ -32,11 +32,11 @@ public class PatheParser {
 		
 		List<Movie> result = new ArrayList<Movie>();
 		
-		for (Element e : doc.select(".movie-highlight.bioscoopagenda")) {
-			String title = e.select("div.heading h3 a").get(0).text();
-			String thumbnail = e.select("a img").get(0).attr("abs:src");
+		for (Element e : doc.select(".schedule-movie")) {
+			String title = e.select(".poster").get(0).attr("title");
+			String thumbnail = e.select(".thumb img").get(0).attr("abs:src");
 			Movie movie = new Movie(title, thumbnail);
-			movie.locations = getLocations(e.nextElementSibling());
+			movie.locations = getLocations(e.select(".table-schedule").get(0));
 			result.add(movie);
 		}
 		
@@ -46,33 +46,28 @@ public class PatheParser {
 	private static List<Location> getLocations(Element table) {
 		List<Location> locations = new ArrayList<Location>();
 		
-		for (Element locEl : table.select("tr table tr")) {
-			Location location = new Location(locEl.select("th a").get(0).ownText());
-			location.shows = getShows(locEl.select("td a"));
+		for (Element locEl : table.select("tr")) {
+			Location location = new Location(locEl.select("th").text());
+			location.shows = getShows(locEl.select("td").get(1));
 			locations.add(location);
 		}
 		
 		return locations;
 	}
 	
-	private static List<Show> getShows(Elements elems) {
+	private static List<Show> getShows(Element elem) {
 		List<Show> shows = new ArrayList<Show>();
-		for (Element a : elems) {
-			String[] timeSplit = a.ownText().split(" ", 2);
-			String time = timeSplit[0];
+		
+		for (Element a : elem.select("a")) {
+			Elements spans = a.select("span");
+			
+			String time = spans.first().text();
 			
 			String type = null;
-			if (timeSplit.length > 1)
-				type = timeSplit[1];
-			else if (a.children().size() > 0)
-				type = a.child(0).text();
+			if (spans.size() > 1)
+				type = spans.get(1).text();
 			
-			String href = a.attr("href");
-			
-			String url = null;
-			// For some shows you can't get tickets online:
-			if (href.startsWith("javascript:openPopup("))
-				url = "http://www.pathe.nl" + href.substring(22, href.length() - 2);
+			String url = a.attr("abs:href");
 			
 			Show show = new Show(time, type, url);
 			log.info("Show: " + show);

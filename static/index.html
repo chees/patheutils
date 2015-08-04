@@ -133,11 +133,29 @@ nav a:hover {
   padding: 3px;
   background-color: #e3e3e3;
   text-decoration: none;
-  border-radius: 8px;
+  border-radius: 3px;
 }
 .container .locations a:hover {
   color: #333;
   background-color: #b2b2b2;
+}
+.container .locations a[class^="type-"]:after {
+  padding: 3px;
+  margin-left: 3px;
+  margin-right: -3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  font-weight: bold;
+}
+.container .locations a.type-3D:after {
+  background: #a7a9ac;
+  color: #0374b4;
+  content: "3D";
+}
+.container .locations a.type-IMAX:after {
+  background: #0185d0;
+  color: #fff;
+  content: "IMAX";
 }
 .container.in {
   -webkit-animation: in 1s;
@@ -170,6 +188,13 @@ footer {
   }
   .container .locations a {
     padding: 4px 6px;
+  }
+  .container .locations a[class^="type-"]:after {
+    padding: 4px;
+    margin-left: 3px;
+    margin-right: -6px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
   }
 }
 
@@ -271,6 +296,7 @@ function renderLocations(locations, day) {
       var a = document.createElement('a');
       a.href = s.url;
       a.appendChild(document.createTextNode(s.time));
+      a.className = 'type-' + s.type;
       td.appendChild(a);
     }
     tr.appendChild(td);

@@ -19,7 +19,7 @@
 
 	<properties>
 		<appengine.app.version>1</appengine.app.version>
-		<appengine.target.version>1.8.8</appengine.target.version>
+		<appengine.target.version>1.9.24</appengine.target.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -135,7 +135,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.9</version>
+				<version>2.10</version>
 				<configuration>
 					<additionalBuildcommands>
 						<buildCommand>

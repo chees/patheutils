@@ -17,7 +17,7 @@ public class Movie implements Comparable<Movie> {
 	
 	@Override
 	public String toString() {
-		return title + "\n" + imdbId + "\n" + imdbTitle + "\n" + rating + "\n";
+		return title + "\n" + thumbnail + "\n" + imdbId + "\n" + imdbTitle + "\n" + rating + "\n";
 	}
 
 	@Override
