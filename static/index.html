@@ -281,7 +281,10 @@ function renderLocations(locations, day) {
     var tr = document.createElement('tr');
     
     var th = document.createElement('th');
-    th.appendChild(document.createTextNode(l.name.substring(6)));
+    var locName = l.name;
+    if (locName.startsWith('Pathé'))
+      locName = locName.substring(6);
+    th.appendChild(document.createTextNode(locName));
     tr.appendChild(th);
     
     var td = document.createElement('td');
