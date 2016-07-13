@@ -57,10 +57,12 @@ public class ImdbParser {
 			}
 		}
 	}
-	
+
 	private static String cleanTitle(String title) {
-		if (title.endsWith("(OV)") || title.endsWith("(NL)")) {
-			return title.substring(0, title.length() - 5);
+		String[] suffixes = {" (Nederlandse versie)", " (Originele versie)", " (OV)", " (NL)"};
+		for (String s : suffixes) {
+			if (title.endsWith(s))
+				return title.substring(0, title.length() - s.length());
 		}
 		return title;
 	}
@@ -84,7 +86,7 @@ public class ImdbParser {
 			movie.imdbTitle = title.substring(0, title.length() - 7);
 		}
 		
-		Elements ratings = doc.select(".star-box-giga-star");
+		Elements ratings = doc.select("[itemprop=ratingValue]");
 		if (ratings.size() < 1) {
 			log.warning("rating not found");
 		} else {

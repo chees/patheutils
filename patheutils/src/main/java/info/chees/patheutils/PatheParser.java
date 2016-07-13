@@ -35,14 +35,16 @@ public class PatheParser {
 		connection.timeout(30000);
 		Document doc = connection.get();
 
-		for (Element e : doc.select(".schedule-movie")) {
-			String title = e.select(".poster").get(0).attr("title");
-			String thumbnail = e.select(".thumb img").get(0).attr("abs:src");
+		for (Element e : doc.select(".schedule-default__item")) {
+			Element img = e.select("img").get(0);
+			String title = img.attr("alt");
+			String thumbnail = img.attr("abs:src");
 			Movie movie = new Movie(title, thumbnail);
-			movie.locations = getLocations(e.select(".table-schedule").get(0));
+			movie.locations = getLocations(e.select(".schedule-table").get(0));
 			result.add(movie);
 		}
 
+		/*
 		// Filmhuis
 		dateString = new SimpleDateFormat("yyyy-MM-dd").format(date);
 		url = "http://www.filmhuisdenhaag.nl/agenda/" + dateString + "/alles";
@@ -75,6 +77,7 @@ public class PatheParser {
 			movie.locations.get(0).shows.add(show);
 		}
 		result.addAll(byTitle.values());
+		*/
 
 		return result;
 	}
@@ -84,7 +87,7 @@ public class PatheParser {
 
 		for (Element locEl : table.select("tr")) {
 			Location location = new Location(locEl.select("th").text());
-			location.shows = getShows(locEl.select("td").get(1));
+			location.shows = getShows(locEl.select("td").get(0));
 			locations.add(location);
 		}
 
